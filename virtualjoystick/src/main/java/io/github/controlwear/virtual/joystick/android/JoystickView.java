@@ -741,21 +741,29 @@ public class JoystickView extends View {
     SETTERS
      */
 
-    /**
-     * Sets the angle following the 360° counter-clock protractor rules.
-     */
-    public void setAngle(int angle) {
-        mPosX =  Math.round((getStrength() * 0.01 * Math.cos(Math.toRadians(angle))) + mCenterX);
-        mPosY =  Math.round((getStrength() * 0.01 * Math.sin(Math.toRadians(angle))) + mCenterY);
+    public void setNormalizedY(int normalizedY) {
+        if (getHeight() == 0) {
+            mPosY = mCenterY;
+            return;
+        }
+
+        normalizedY = Math.max(0, Math.min(100, normalizedY));
+
+        float position = ((100 - normalizedY) * (mBorderRadius * 2) / 100.0f) + (mCenterY - mBorderRadius);
+        mPosY = Math.round(position);
         invalidate();
     }
 
-    /**
-     * Sets the strength as a percentage of the distance between the center and the border.
-     */
-    public void setStrength(int strength) {
-        mPosX =  Math.round((strength * 0.01 * Math.cos(Math.toRadians(getAngle()))) + mCenterX);
-        mPosY =  Math.round((strength * 0.01 * Math.sin(Math.toRadians(getAngle()))) + mCenterY);
+    public void setNormalizedX(int normalizedX) {
+        if (getWidth() == 0) {
+            mPosX = mCenterX;
+            return;
+        }
+
+        normalizedX = Math.max(0, Math.min(100, normalizedX));
+
+        float position = (normalizedX * (mBorderRadius * 2) / 100.0f) + (mCenterX - mBorderRadius);
+        mPosX = Math.round(position);
         invalidate();
     }
 
