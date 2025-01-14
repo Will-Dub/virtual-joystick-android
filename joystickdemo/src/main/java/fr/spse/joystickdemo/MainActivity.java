@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,29 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
         joystick.setAxisMotion(JoystickView.AXIS_BOTH);
 
-
-        Switch Switch = findViewById(R.id.switch_use_Rectangle);
-        Switch.setOnCheckedChangeListener((buttonView, isChecked) -> joystick.setRectangle(isChecked) );
-        joystick.setRectangle (Switch.isChecked());
-
-        Switch fixedCenterSwitch = findViewById(R.id.switch_fixed_center);
-        fixedCenterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> joystick.setFixedCenter(isChecked));
-        joystick.setFixedCenter(fixedCenterSwitch.isChecked());
-
-        Switch stickyBorderSwitch = findViewById(R.id.switch_sticky_border);
-        stickyBorderSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> joystick.setButtonStickToBorder(isChecked));
-        joystick.setButtonStickToBorder(stickyBorderSwitch.isChecked());
-
         Switch autoCenterSwitch = findViewById(R.id.switch_auto_center);
         autoCenterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> joystick.setAutoReCenterButton(isChecked));
-        joystick.setAutoReCenterButton(autoCenterSwitch.isChecked());
+        joystick.setAutoReCenterButton(false);
 
         TextView normalized = findViewById(R.id.normalized);
         TextView del = findViewById(R.id.del);
         TextView mStrength = findViewById(R.id.strength);
         TextView mDirection = findViewById(R.id.stickDirection);
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-            
+
             @Override
             public void onMove(int angle, int strength, MotionEvent event) {
                 mStrength.setText(strength + "%");
@@ -74,6 +62,19 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         });
+
+        findViewById(R.id.ddd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mStrength.setText(joystick.getStrength() + "%");
+                joystick.setNormalizedY(0);
+                joystick.setNormalizedX(0);
+            }
+        });
+
+        mStrength.setText(joystick.getStrength() + "%");
+        mDirection.setText(joystick.getPosition() + "");
+
 
     }
 }
